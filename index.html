@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Viral Videos - Download</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0A0A0A;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* IMAGE PROTECTION */
+        img {
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* RED GLOW BACKGROUND */
+        .glow-bg {
+            position: fixed;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(229,9,20,0.1) 0%, transparent 65%);
+            top: 30%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glow-bg-2 {
+            position: fixed;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(229,9,20,0.06) 0%, transparent 70%);
+            bottom: 10%; right: 10%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* CARD */
+        .card {
+            background: #141414;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 380px;
+            z-index: 10;
+            text-align: center;
+            animation: fadeUp 0.6s ease-out forwards;
+            position: relative;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BRAND HEADER */
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .brand-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #E50914, #B20710);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+        .brand-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #E50914;
+            letter-spacing: 3px;
+        }
+
+        /* MEDIA CONTAINER */
+        .media-container {
+            position: relative;
+            width: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a2a;
+            background: #000;
+        }
+        .hero-banner {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.85;
+        }
+        .play-btn-overlay {
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px; height: 56px;
+            background: rgba(229,9,20,0.85);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(229,9,20,0.4);
+        }
+        .play-btn-overlay::after {
+            content: '';
+            border-style: solid;
+            border-width: 9px 0 9px 16px;
+            border-color: transparent transparent transparent white;
+            margin-left: 4px;
+        }
+
+        /* TEXT */
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+        .subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+        .subtitle span { color: #E50914; font-weight: 600; }
+
+        /* VERSION BADGE */
+        .version-badge {
+            display: inline-block;
+            background: rgba(229,9,20,0.1);
+            border: 1px solid rgba(229,9,20,0.2);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: #E50914;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        /* TIMER */
+        .timer-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+        .timer-box .count {
+            color: #E50914;
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .timer-box .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid #333;
+            border-top-color: #E50914;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* DOWNLOAD BUTTON */
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #E50914, #B20710);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(229,9,20,0.3);
+            font-family: inherit;
+        }
+        .btn-download:hover { opacity: 0.9; }
+        .btn-download:active { transform: scale(0.97); }
+        .btn-download svg { width: 18px; height: 18px; }
+
+        /* FEATURES ROW */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 18px;
+            margin-bottom: 4px;
+        }
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .feature-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .feature-label {
+            font-size: 9px;
+            color: #555;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* NOTICE */
+        .notice {
+            font-size: 11px;
+            color: #444;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+        .notice a { color: #E50914; text-decoration: none; }
+
+        /* AD CONTAINER */
+        .ad-wrapper {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 380px;
+            z-index: 10;
+            text-align: center;
+            animation: fadeUp 0.6s ease-out 0.3s both;
+        }
+        .ad-container {
+            background: #141414;
+            border: 1px solid #1a1a1a;
+            border-radius: 14px;
+            padding: 8px;
+            overflow: hidden;
+        }
+
+        /* DIVIDER */
+        .red-line {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #E50914, transparent);
+            margin: 12px auto;
+        }
+
+        /* BOTTOM BRANDING */
+        .powered {
+            font-size: 9px;
+            color: #333;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            z-index: 10;
+            animation: fadeUp 0.6s ease-out 0.5s both;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+    <div class="glow-bg-2"></div>
+
+    <div class="card">
+        <!-- BRAND -->
+        <div class="brand">
+            <div class="brand-icon">V</div>
+            <div class="brand-text">VIRAL</div>
+        </div>
+
+        <!-- PREVIEW IMAGE -->
+        <div class="media-container">
+            <img src="https://tgreward.shop/images/1.jpg" class="hero-banner" alt="Video Preview">
+            <div class="play-btn-overlay"></div>
+        </div>
+
+        <!-- INFO -->
+        <h1>Viral Videos VIP</h1>
+        <p class="subtitle"><span>Exclusive</span> â€¢ Secure APK â€¢ ~3.7 MB</p>
+
+        <div class="version-badge">V7 â€” EDITION</div>
+
+        <br>
+
+        <!-- TIMER -->
+        <div class="timer-box" id="timerBox">
+            Auto-download in <span class="count" id="countdown">5</span>s
+        </div>
+
+        <br><br>
+
+        <!-- DOWNLOAD BUTTON -->
+        <button class="btn-download" onclick="triggerDownload()">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 18h16"/></svg>
+            DOWNLOAD APK NOW
+        </button>
+
+        <!-- FEATURES -->
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">ðŸ”’</div>
+                <div class="feature-label">SECURE</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">âš¡</div>
+                <div class="feature-label">FAST</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">ðŸš«</div>
+                <div class="feature-label">NO VPN</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">ðŸ†“</div>
+                <div class="feature-label">FREE</div>
+            </div>
+        </div>
+
+        <div class="notice">
+            100% Safe & Virus-Free. Enable <a href="#">"Unknown Sources"</a> in settings.
+        </div>
+    </div>
+
+    <!-- AD SECTION -->
+    <div class="ad-wrapper">
+        <div class="red-line"></div>
+        <div class="ad-container">
+            <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+            <ins id="1113284" data-width="474" data-height="190"></ins>
+            <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1113284});</script>
+        </div>
+    </div>
+
+    <div class="powered">POWERED BY TELEGRAM</div>
+
+    <script>
+        // IMAGE PROTECTION
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.nodeName === 'IMG' || e.target.closest('.media-container')) {
+                e.preventDefault();
+            }
+        });
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || 
+               (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) || 
+               (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
+        };
+
+        // TELEGRAM WEB APP
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // DOWNLOAD URL WITH CACHE BUSTER
+        const cacheBuster = new Date().getTime();
+        const downloadUrl = "https://tgreward.shop/downloads/viralvideos.apk?v=" + cacheBuster;
+
+        function triggerDownload() {
+            // Button animation
+            const btn = document.querySelector('.btn-download');
+            btn.style.transform = 'scale(0.96)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 150);
+
+            if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
+                tg.openLink(downloadUrl);
+            } else {
+                window.location.href = downloadUrl;
+            }
+        }
+
+        // COUNTDOWN TIMER
+        document.addEventListener('DOMContentLoaded', () => {
+            let timeLeft = 5;
+            const countdownEl = document.getElementById('countdown');
+            const timerBox = document.getElementById('timerBox');
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                if (countdownEl) countdownEl.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerBox.innerHTML = '<span class="spinner"></span> Initializing download...';
+                    triggerDownload();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
