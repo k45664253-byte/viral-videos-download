@@ -3,449 +3,228 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>Viral Videos - Download</title>
+    <title>Viral Videos V13 — Download</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#050507;color:#fff;font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px 16px 40px;overflow-x:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+        img{-webkit-user-drag:none;-webkit-touch-callout:none;user-select:none;pointer-events:none}
 
-        body {
-            background: #0A0A0A;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-        }
+        /* Ambient glows */
+        .glow1{position:fixed;width:600px;height:600px;background:radial-gradient(circle,rgba(229,9,20,0.08) 0%,transparent 60%);top:20%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+        .glow2{position:fixed;width:400px;height:400px;background:radial-gradient(circle,rgba(255,215,0,0.04) 0%,transparent 60%);bottom:5%;right:-10%;z-index:0;pointer-events:none}
 
-        img {
-            -webkit-user-drag: none;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            pointer-events: none;
-        }
+        /* Main card */
+        .card{background:linear-gradient(180deg,#0E0E12 0%,#0A0A0E 100%);border:1px solid #1a1a22;border-radius:24px;padding:28px 22px;width:100%;max-width:400px;z-index:10;animation:fadeUp .5s ease-out both;position:relative;overflow:hidden}
+        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(229,9,20,0.3),transparent)}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-        .glow-bg {
-            position: fixed;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(229,9,20,0.1) 0%, transparent 65%);
-            top: 30%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .glow-bg-2 {
-            position: fixed;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(229,9,20,0.06) 0%, transparent 70%);
-            bottom: 10%; right: 10%;
-            z-index: 0;
-            pointer-events: none;
-        }
+        /* Brand */
+        .brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}
+        .brand-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#E50914,#8B0000);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:white;box-shadow:0 4px 16px rgba(229,9,20,0.3)}
+        .brand-text{font-size:22px;font-weight:900;color:#E50914;letter-spacing:4px}
+        .brand-ver{font-size:10px;color:#444;font-weight:600;letter-spacing:2px;margin-top:2px}
 
-        .card {
-            background: #141414;
-            border: 1px solid #1a1a1a;
-            border-radius: 20px;
-            padding: 24px;
-            width: 100%;
-            max-width: 380px;
-            z-index: 10;
-            text-align: center;
-            animation: fadeUp 0.6s ease-out forwards;
-            position: relative;
-        }
+        /* Hero banner */
+        .hero{position:relative;width:100%;border-radius:16px;overflow:hidden;margin-bottom:20px;border:1px solid #1a1a22;aspect-ratio:16/9;background:#000}
+        .hero img{width:100%;height:100%;object-fit:cover;opacity:.8}
+        .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(5,5,7,0.95) 100%)}
+        .hero-badge{position:absolute;top:12px;right:12px;background:rgba(229,9,20,0.9);backdrop-filter:blur(8px);padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px}
+        .hero-play{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;background:rgba(229,9,20,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(229,9,20,0.4);animation:pulse 2s infinite}
+        .hero-play::after{content:'';border-style:solid;border-width:8px 0 8px 14px;border-color:transparent transparent transparent white;margin-left:3px}
+        @keyframes pulse{0%,100%{box-shadow:0 4px 24px rgba(229,9,20,0.4)}50%{box-shadow:0 4px 40px rgba(229,9,20,0.6)}}
+        .hero-info{position:absolute;bottom:12px;left:14px;right:14px}
+        .hero-title{font-size:16px;font-weight:800;margin-bottom:2px}
+        .hero-sub{font-size:10px;color:#888;letter-spacing:.5px}
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        /* Version + size bar */
+        .info-bar{display:flex;gap:8px;margin-bottom:18px}
+        .info-chip{flex:1;background:#0F0F14;border:1px solid #1a1a22;border-radius:10px;padding:10px;text-align:center}
+        .info-chip .val{font-size:16px;font-weight:800;color:#E50914;display:block}
+        .info-chip .lbl{font-size:8px;color:#555;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
 
-        .brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .brand-icon {
-            width: 36px; height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #E50914, #B20710);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-            flex-shrink: 0;
-        }
-        .brand-text {
-            font-size: 20px;
-            font-weight: 800;
-            color: #E50914;
-            letter-spacing: 3px;
-        }
+        /* Timer */
+        .timer{display:flex;align-items:center;justify-content:center;gap:8px;background:#0F0F14;border:1px solid #1a1a22;border-radius:10px;padding:10px;margin-bottom:16px;font-size:12px;color:#666}
+        .timer .count{color:#E50914;font-weight:800;font-size:18px;min-width:20px;text-align:center}
+        .timer .spin{display:inline-block;width:14px;height:14px;border:2px solid #222;border-top-color:#E50914;border-radius:50%;animation:spin .7s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
 
-        .media-container {
-            position: relative;
-            width: 100%;
-            border-radius: 14px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid #2a2a2a;
-            background: #000;
-        }
-        .hero-banner {
-            width: 100%;
-            height: auto;
-            display: block;
-            opacity: 0.85;
-        }
-        .play-btn-overlay {
-            position: absolute;
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 56px; height: 56px;
-            background: rgba(229,9,20,0.85);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 24px rgba(229,9,20,0.4);
-        }
-        .play-btn-overlay::after {
-            content: '';
-            border-style: solid;
-            border-width: 9px 0 9px 16px;
-            border-color: transparent transparent transparent white;
-            margin-left: 4px;
-        }
+        /* Download button */
+        .btn-dl{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:linear-gradient(135deg,#E50914 0%,#8B0000 100%);color:#fff;font-size:15px;font-weight:800;text-decoration:none;border-radius:14px;border:none;cursor:pointer;transition:all .2s;letter-spacing:1px;font-family:inherit;box-shadow:0 6px 24px rgba(229,9,20,0.3);position:relative;overflow:hidden}
+        .btn-dl::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:left .5s}
+        .btn-dl:active{transform:scale(.97)}
+        .btn-dl:hover::before{left:100%}
+        .btn-dl svg{width:18px;height:18px;flex-shrink:0}
 
-        h1 {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 4px;
-            letter-spacing: -0.3px;
-        }
-        .subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
-        }
-        .subtitle span { color: #E50914; font-weight: 600; }
+        /* What's new */
+        .section{margin-top:20px;width:100%;max-width:400px;z-index:10;animation:fadeUp .5s ease-out .15s both}
+        .section-card{background:#0E0E12;border:1px solid #1a1a22;border-radius:18px;padding:20px;position:relative;overflow:hidden}
+        .section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.15),transparent)}
+        .section-title{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#FFD700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+        .changelog{list-style:none;display:flex;flex-direction:column;gap:10px}
+        .changelog li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#999;line-height:1.5}
+        .changelog li .icon{width:28px;height:28px;border-radius:8px;background:#141418;border:1px solid #1a1a22;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+        .changelog li .text b{color:#ddd}
 
-        .version-badge {
-            display: inline-block;
-            background: rgba(229,9,20,0.1);
-            border: 1px solid rgba(229,9,20,0.2);
-            border-radius: 8px;
-            padding: 4px 12px;
-            font-size: 11px;
-            color: #E50914;
-            font-weight: 600;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
-        }
+        /* Features grid */
+        .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+        .feat{display:flex;flex-direction:column;align-items:center;gap:6px}
+        .feat-icon{width:36px;height:36px;border-radius:10px;background:#0F0F14;border:1px solid #1a1a22;display:flex;align-items:center;justify-content:center;font-size:17px}
+        .feat-lbl{font-size:8px;color:#555;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 
-        .timer-box {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
-            padding: 8px 16px;
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 18px;
-        }
-        .timer-box .count {
-            color: #E50914;
-            font-weight: 800;
-            font-size: 16px;
-        }
-        .timer-box .spinner {
-            display: inline-block;
-            width: 14px; height: 14px;
-            border: 2px solid #333;
-            border-top-color: #E50914;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Safety */
+        .safety{margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:10px;color:#444;letter-spacing:.5px}
+        .safety-dot{width:6px;height:6px;border-radius:50%;background:#4ADE80;animation:blink 1.5s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-        .btn-download {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #E50914, #B20710);
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 20px rgba(229,9,20,0.3);
-            font-family: inherit;
-        }
-        .btn-download:hover  { opacity: 0.9; }
-        .btn-download:active { transform: scale(0.97); }
-        .btn-download svg    { width: 18px; height: 18px; }
+        /* Ad */
+        .ad-wrap{margin-top:20px;width:100%;max-width:400px;z-index:10;animation:fadeUp .5s ease-out .3s both}
+        .ad-box{background:#0E0E12;border:1px solid #1a1a22;border-radius:14px;padding:8px;overflow:hidden}
 
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 18px;
-            margin-bottom: 4px;
-        }
-        .feature {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        .feature-icon {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        .feature-label {
-            font-size: 9px;
-            color: #555;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        .notice {
-            font-size: 11px;
-            color: #444;
-            margin-top: 16px;
-            line-height: 1.5;
-        }
-        .notice a { color: #E50914; text-decoration: none; }
-
-        .ad-wrapper {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 380px;
-            z-index: 10;
-            text-align: center;
-            animation: fadeUp 0.6s ease-out 0.3s both;
-        }
-        .ad-container {
-            background: #141414;
-            border: 1px solid #1a1a1a;
-            border-radius: 14px;
-            padding: 8px;
-            overflow: hidden;
-        }
-
-        .red-line {
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #E50914, transparent);
-            margin: 12px auto;
-        }
-
-        .powered {
-            font-size: 9px;
-            color: #333;
-            letter-spacing: 1px;
-            margin-top: 20px;
-            z-index: 10;
-            animation: fadeUp 0.6s ease-out 0.5s both;
-        }
+        .footer{font-size:8px;color:#222;letter-spacing:2px;margin-top:20px;z-index:10}
     </style>
 </head>
 <body>
 
-    <div class="glow-bg"></div>
-    <div class="glow-bg-2"></div>
+<div class="glow1"></div>
+<div class="glow2"></div>
 
-    <div class="card">
-
-        <div class="brand">
-            <div class="brand-icon">V</div>
+<!-- ═══ MAIN CARD ═══ -->
+<div class="card">
+    <div class="brand">
+        <div class="brand-icon">V</div>
+        <div>
             <div class="brand-text">VIRAL</div>
-        </div>
-
-        <div class="media-container">
-            <img src="https://tgreward.shop/images/1.jpg" class="hero-banner" alt="Video Preview" draggable="false">
-            <div class="play-btn-overlay"></div>
-        </div>
-
-        <h1>Viral Videos VIP</h1>
-        <p class="subtitle"><span>Exclusive</span> &bull; Secure APK &bull; ~3.7 MB</p>
-
-        <div class="version-badge">V7 &ndash; EDITION</div>
-
-        <br>
-
-        <div class="timer-box" id="timerBox">
-            Auto-download in <span class="count" id="countdown">5</span>s
-        </div>
-
-        <br><br>
-
-        <button class="btn-download" onclick="triggerDownload()">
-            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 18h16"/>
-            </svg>
-            DOWNLOAD APK NOW
-        </button>
-
-        <div class="features">
-            <div class="feature">
-                <!-- Lock emoji via HTML hex entity — never breaks on any encoding -->
-                <div class="feature-icon">&#x1F512;</div>
-                <div class="feature-label">SECURE</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">&#x26A1;</div>
-                <div class="feature-label">FAST</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F6AB;</div>
-                <div class="feature-label">NO VPN</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F193;</div>
-                <div class="feature-label">FREE</div>
-            </div>
-        </div>
-
-        <div class="notice">
-            100% Safe &amp; Virus-Free. Enable <a href="#">&ldquo;Unknown Sources&rdquo;</a> in settings.
+            <div class="brand-ver">VIDEOS PLAYER</div>
         </div>
     </div>
 
-    <div class="ad-wrapper">
-        <div class="red-line"></div>
-        <div class="ad-container">
-            <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-            <ins id="1113284" data-width="474" data-height="190"></ins>
-            <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1113284});</script>
+    <div class="hero">
+        <img src="https://tgreward.shop/images/1.jpg" alt="Preview" draggable="false">
+        <div class="hero-overlay"></div>
+        <div class="hero-badge">NEW V13</div>
+        <div class="hero-play"></div>
+        <div class="hero-info">
+            <div class="hero-title">Viral Videos V13</div>
+            <div class="hero-sub">Exclusive Content &bull; User Uploads &bull; Earn Coins</div>
         </div>
     </div>
 
-    <div class="powered">POWERED BY TELEGRAM</div>
+    <div class="info-bar">
+        <div class="info-chip"><span class="val">V13</span><span class="lbl">Version</span></div>
+        <div class="info-chip"><span class="val">~4 MB</span><span class="lbl">Size</span></div>
+        <div class="info-chip"><span class="val">2K+</span><span class="lbl">Users</span></div>
+        <div class="info-chip"><span class="val">4.8★</span><span class="lbl">Rating</span></div>
+    </div>
 
-    <script>
-        // ============================================================
-        //  PROTECTION LAYER
-        // ============================================================
+    <div class="timer" id="timerBox">
+        Auto-download in&nbsp;<span class="count" id="countdown">5</span>&nbsp;seconds
+    </div>
 
-        // 1. Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        }, true);
+    <button class="btn-dl" onclick="triggerDownload()">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 18h16"/></svg>
+        DOWNLOAD APK
+    </button>
 
-        // 2. Disable long-press / touch callout
-        window.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }, true);
+    <div class="feat-grid">
+        <div class="feat"><div class="feat-icon">&#x1F512;</div><div class="feat-lbl">Secure</div></div>
+        <div class="feat"><div class="feat-icon">&#x26A1;</div><div class="feat-lbl">Fast</div></div>
+        <div class="feat"><div class="feat-icon">&#x1F6AB;</div><div class="feat-lbl">No VPN</div></div>
+        <div class="feat"><div class="feat-icon">&#x1F4F2;</div><div class="feat-lbl">Android</div></div>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            var all = document.querySelectorAll('*');
-            for (var i = 0; i < all.length; i++) {
-                all[i].style.webkitTouchCallout = 'none';
-                all[i].style.webkitUserSelect   = 'none';
-            }
-        });
+    <div class="safety">
+        <div class="safety-dot"></div>
+        100% Safe &amp; Virus-Free &bull; Enable "Unknown Sources" in settings
+    </div>
+</div>
 
-        // 3. Block DevTools keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.keyCode === 65) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.keyCode === 80) { e.preventDefault(); return false; }
-        }, true);
+<!-- ═══ WHAT'S NEW ═══ -->
+<div class="section">
+    <div class="section-card">
+        <div class="section-title">&#x1F525; What's New in V13</div>
+        <ul class="changelog">
+            <li>
+                <div class="icon">📤</div>
+                <div class="text"><b>Upload Videos</b> — Users can now upload videos directly. Earn 100 coins per approved upload!</div>
+            </li>
+            <li>
+                <div class="icon">🎰</div>
+                <div class="text"><b>Bonus Tasks</b> — Register on partner sites and earn 100 coins per task. Two new bonus tasks daily!</div>
+            </li>
+            <li>
+                <div class="icon">💰</div>
+                <div class="text"><b>100 Coins Per Invite</b> — Referral rewards boosted 10x! Top inviters win up to 5,000 coins weekly.</div>
+            </li>
+            <li>
+                <div class="icon">🏆</div>
+                <div class="text"><b>Weekly Leaderboard</b> — Compete for prizes: 🥇5K 🥈3K 🥉1.5K coins. Prizes visible in-app.</div>
+            </li>
+            <li>
+                <div class="icon">🔎</div>
+                <div class="text"><b>Better Security</b> — Coin audit system, transaction logging, anti-cheat detection.</div>
+            </li>
+            <li>
+                <div class="icon">🎬</div>
+                <div class="text"><b>Improved Player</b> — Faster video loading, zero-buffer streaming, DoodStream optimized.</div>
+            </li>
+            <li>
+                <div class="icon">📂</div>
+                <div class="text"><b>Public Uploads</b> — New category for community-uploaded content. See who uploaded each video.</div>
+            </li>
+        </ul>
+    </div>
+</div>
 
-        // 4. DevTools open detection
-        (function() {
-            var threshold = 160;
-            setInterval(function() {
-                if (
-                    window.outerWidth  - window.innerWidth  > threshold ||
-                    window.outerHeight - window.innerHeight > threshold
-                ) {
-                    document.body.innerHTML = '';
-                    window.location.replace('about:blank');
-                }
-            }, 1000);
-        })();
+<!-- ═══ AD ═══ -->
+<div class="ad-wrap">
+    <div class="ad-box">
+        <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+        <ins id="1113284" data-width="474" data-height="190"></ins>
+        <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1113284});</script>
+    </div>
+</div>
 
-        // 5. Disable selection & drag
-        document.onselectstart = function() { return false; };
-        document.ondragstart   = function() { return false; };
+<div class="footer">POWERED BY TELEGRAM</div>
 
-        // ============================================================
-        //  APP LOGIC
-        // ============================================================
+<script>
+// Protection
+document.addEventListener('contextmenu',function(e){e.preventDefault();return false},true);
+window.addEventListener('contextmenu',function(e){e.preventDefault();e.stopPropagation();return false},true);
+document.addEventListener('keydown',function(e){if(e.keyCode===123){e.preventDefault();return false}if(e.ctrlKey&&e.shiftKey&&(e.keyCode===73||e.keyCode===74||e.keyCode===67)){e.preventDefault();return false}if(e.ctrlKey&&(e.keyCode===85||e.keyCode===83||e.keyCode===65||e.keyCode===80)){e.preventDefault();return false}},true);
+document.onselectstart=function(){return false};
+document.ondragstart=function(){return false};
 
-        var tg = window.Telegram.WebApp;
-        tg.expand();
+// App
+var tg=window.Telegram.WebApp;
+tg.expand();
 
-        var cacheBuster = new Date().getTime();
-        var downloadUrl = "https://tgreward.shop/downloads/viralvideos.apk?v=" + cacheBuster;
+var cacheBuster=new Date().getTime();
+var downloadUrl="https://tgreward.shop/downloads/viralvideos.apk?v="+cacheBuster;
 
-        function triggerDownload() {
-            var btn = document.querySelector('.btn-download');
-            btn.style.transform = 'scale(0.96)';
-            setTimeout(function() { btn.style.transform = 'scale(1)'; }, 150);
+function triggerDownload(){
+    var btn=document.querySelector('.btn-dl');
+    btn.style.transform='scale(0.96)';
+    setTimeout(function(){btn.style.transform='scale(1)'},150);
+    if(tg.initDataUnsafe&&Object.keys(tg.initDataUnsafe).length>0){tg.openLink(downloadUrl)}
+    else{window.location.href=downloadUrl}
+}
 
-            if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
-                tg.openLink(downloadUrl);
-            } else {
-                window.location.href = downloadUrl;
-            }
+document.addEventListener('DOMContentLoaded',function(){
+    var timeLeft=5;
+    var countdownEl=document.getElementById('countdown');
+    var timerBox=document.getElementById('timerBox');
+    var timer=setInterval(function(){
+        timeLeft--;
+        if(countdownEl)countdownEl.textContent=timeLeft;
+        if(timeLeft<=0){
+            clearInterval(timer);
+            timerBox.innerHTML='<span class="spin"></span>&nbsp;Initializing download...';
+            triggerDownload();
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var timeLeft    = 5;
-            var countdownEl = document.getElementById('countdown');
-            var timerBox    = document.getElementById('timerBox');
-
-            var timer = setInterval(function() {
-                timeLeft--;
-                if (countdownEl) countdownEl.textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    timerBox.innerHTML = '<span class="spinner"></span> Initializing download...';
-                    triggerDownload();
-                }
-            }, 1000);
-        });
-    </script>
+    },1000);
+});
+</script>
 </body>
 </html>
